@@ -88,7 +88,12 @@ def find_new_restaurants(last_known_krs):
         print("KRS: brak nowych firm od ostatniego uruchomienia.")
         return [], last_known_krs
 
-    print(f"KRS: znaleziono {len(new_numbers)} nowych firm, sprawdzam PKD...")
+    MAX_TO_CHECK = 300
+    if len(new_numbers) > MAX_TO_CHECK:
+        print(f"KRS: ograniczam do {MAX_TO_CHECK} najnowszych numerów (było {len(new_numbers)})...")
+        new_numbers = new_numbers[:MAX_TO_CHECK]
+
+    print(f"KRS: sprawdzam {len(new_numbers)} firm pod kątem PKD...")
 
     restaurants = []
     new_max_krs = max(new_numbers)
