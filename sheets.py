@@ -8,7 +8,7 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 def get_client(google_credentials_json):
     """Połącz się z Google Sheets."""
-    creds_dict = json.loads(google_credentials_json)
+    creds_dict = json.loads(google_credentials_json.encode().decode('utf-8-sig'))
     creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
     return gspread.authorize(creds)
 
