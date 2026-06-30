@@ -47,7 +47,9 @@ def main():
     spreadsheet_id = os.environ["SPREADSHEET_ID"]
 
     # Połącz z Google Sheets
+    print("Łączę z Google Sheets...")
     client = sheets.get_client(google_credentials)
+    print("Połączono z Google Sheets.")
 
     # Pobierz ostatni znany numer KRS
     last_krs = sheets.get_last_krs(client, spreadsheet_id)
