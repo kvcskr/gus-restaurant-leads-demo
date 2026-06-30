@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:dashboard.n8n-mcp.com)",
+      "WebFetch(domain:primary-production-d794.up.railway.app)"
+    ]
+  }
+}
