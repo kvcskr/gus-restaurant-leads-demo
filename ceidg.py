@@ -1,13 +1,13 @@
 import requests
-from datetime import date
+from datetime import date, timedelta
 
 
 GASTRONOMY_PKD_CODES = ["5610A", "5610B", "5621Z", "5630Z"]
 
 
 def find_new_restaurants(ceidg_token):
-    """Pobierz nowe restauracje z CEIDG zarejestrowane dzisiaj."""
-    today = date.today().strftime("%Y-%m-%d")
+    """Pobierz nowe restauracje z CEIDG zarejestrowane wczoraj."""
+    today = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
     headers = {
         "Authorization": f"Bearer {ceidg_token}",
         "Accept": "application/json",
@@ -40,7 +40,13 @@ def find_new_restaurants(ceidg_token):
             continue
 
         for firma in data.get("firmy", []):
+            data_rozpoczecia = (firma.get("dataRozpoczecia") or "")[:10]
+            if data_rozpoczecia != today:
+                continue
             adres = firma.get("adresDzialalnosci", {})
+            telefon = firma.get("telefon") or ""
+            email = firma.get("email") or ""
+            kontakt = " | ".join(filter(None, [telefon, email])) or "brak"
             restaurants.append({
                 "zrodlo": "CEIDG",
                 "nip": firma.get("wlasciciel", {}).get("nip"),
@@ -52,6 +58,7 @@ def find_new_restaurants(ceidg_token):
                 "ulica": f"{adres.get('ulica', '')} {adres.get('budynek', '')}".strip(),
                 "data_rejestracji": firma.get("dataRozpoczecia"),
                 "link": firma.get("link"),
+                "kontakt": kontakt,
             })
 
     print(f"CEIDG: znaleziono {len(restaurants)} restauracji.")

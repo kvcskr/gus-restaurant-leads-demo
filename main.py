@@ -47,9 +47,7 @@ def main():
     spreadsheet_id = os.environ["SPREADSHEET_ID"]
 
     # Połącz z Google Sheets
-    print("Łączę z Google Sheets...")
     client = sheets.get_client(google_credentials)
-    print("Połączono z Google Sheets.")
 
     # Pobierz ostatni znany numer KRS
     last_krs = sheets.get_last_krs(client, spreadsheet_id)
@@ -68,12 +66,14 @@ def main():
     ]
     print(f"Po filtrze regionów: {len(in_region)} restauracji.")
 
-    # Usuń duplikaty (już zapisane w Sheets)
+    # Usuń duplikaty (już zapisane w Sheets + duplikaty w tym samym runie)
     existing_ids = sheets.get_existing_ids(client, spreadsheet_id)
     nowe = []
+    seen_this_run = set()
     for r in in_region:
         id_ = str(r.get("krs") or r.get("nip") or "")
-        if id_ and id_ not in existing_ids:
+        if id_ and id_ not in existing_ids and id_ not in seen_this_run:
+            seen_this_run.add(id_)
             nowe.append(r)
 
     print(f"Nowych leadów (bez duplikatów): {len(nowe)}")

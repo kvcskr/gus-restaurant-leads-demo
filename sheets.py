@@ -67,6 +67,7 @@ def save_leads(client, spreadsheet_id, restaurants):
             r.get("link", ""),
             "nowy",
             r.get("handlowiec", ""),
+            r.get("kontakt", ""),
         ])
 
     leady.append_rows(rows)

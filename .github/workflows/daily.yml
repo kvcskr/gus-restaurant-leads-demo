@@ -2,7 +2,7 @@ name: Specfood — nowe restauracje
 
 on:
   schedule:
-    - cron: "0 18 * * *"  # codziennie o 20:00 czasu polskiego (UTC+2)
+    - cron: "0 8 * * *"   # codziennie o 10:00 czasu polskiego (UTC+2)
   workflow_dispatch:       # możliwość ręcznego odpalenia
 
 jobs:

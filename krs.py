@@ -1,15 +1,15 @@
 import requests
 import time
-from datetime import date
+from datetime import date, timedelta
 
 
 GASTRONOMY_PKD = {"56"}  # dział 56 = gastronomia
 
 
 def get_todays_bulletin():
-    """Pobierz biuletyn KRS z dzisiaj — lista wszystkich zmienionych numerów KRS."""
-    today = date.today().strftime("%Y-%m-%d")
-    url = f"https://api-krs.ms.gov.pl/api/Krs/Biuletyn/{today}"
+    """Pobierz biuletyn KRS z wczoraj — lista wszystkich zmienionych numerów KRS."""
+    yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+    url = f"https://api-krs.ms.gov.pl/api/Krs/Biuletyn/{yesterday}"
     response = requests.get(url, timeout=30)
     response.raise_for_status()
     return response.json()
