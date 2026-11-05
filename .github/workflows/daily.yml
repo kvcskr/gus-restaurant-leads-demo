@@ -1,0 +1,30 @@
+name: Daily restaurant leads
+
+on:
+  schedule:
+    - cron: "0 8 * * *"   # codziennie o 10:00 czasu polskiego (UTC+2)
+  workflow_dispatch:       # możliwość ręcznego odpalenia
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python setup
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalacja bibliotek
+        run: pip install -r requirements.txt
+
+      - name: Uruchom skrypt
+        env:
+          CEIDG_JWT_TOKEN: ${{ secrets.CEIDG_JWT_TOKEN }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+        run: python main.py
